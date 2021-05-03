@@ -19,7 +19,6 @@ export default {
     },
     async UPDATE_ADDRESS ({commit}, formData) {
       try {
-        console.log(formData);
         const { status, data } = await httpClient.put(`address/update?id=${formData.id}`, formData);
         if (status === 200) {
           commit('SET_ADDRESS', data);
