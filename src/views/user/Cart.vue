@@ -9,21 +9,27 @@
     >
       Your Cart is Empty
     </div>
-    <div v-else
-      class="cartMain col-md-10"
-    >
-      <CartItem
-        v-for="item in CART"
-        :key="item.id + 'cart'"
-        :cartItem="item"
-      />
-    </div>
-    <div class="cart-right col-md-2">
-      <div class="cart-right-main">
-        <p class="cart-right-main__total">Total:</p>
-        <p class="cart-right-main__price">{{ totalPrice }}₽</p>
+    <div class="d-flex" v-else>
+      <div class="cartMain col-md-10">
+        <CartItem
+          v-for="item in CART"
+          :key="item.id + 'cart'"
+          :cartItem="item"
+        />
       </div>
-      <button class="cart-right__btn">Checkout</button>
+      <div class="cart-right col-md-2">
+        <div class="cart-right-main">
+          <p class="cart-right-main__total">Total:</p>
+          <p class="cart-right-main__price">{{ totalPrice }}₽</p>
+        </div>
+        <router-link
+          to="order"
+          tag="button"
+          class="cart-right__btn"
+        >
+          Checkout
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -42,10 +48,8 @@
       totalPrice () {
         return this.CART.reduce((total, item) => {
           if (item.product.discountPrice) {
-            console.log(1);
             return total + item.product.discountPrice * parseInt(item.count);
           }
-          console.log(2);
           return total + item.product.price * parseInt(item.count)
         }, 0);
       }

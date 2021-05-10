@@ -95,6 +95,14 @@ const routes = [
             meta: {
               requiresAuth: true
             }
+          },
+          {
+            path: 'order',
+            name: 'Order',
+            component: () => import('../views/user/Order'),
+            meta: {
+              requiresAuth: true
+            }
           }
         ]
       }
