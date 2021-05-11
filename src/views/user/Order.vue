@@ -44,8 +44,54 @@
             </div>
           </form>
         </div>
-        <div v-else>
-          payment
+        <div v-else class="payment">
+          <div class="address-messageBlock">
+            <div v-if="errors">
+              <p
+                v-for="(error, field) in errors"
+                :key="field"
+                class="address-messageBlock-message address-messageBlock-message__error"
+              >
+                {{ error.message }}
+              </p>
+            </div>
+          </div>
+          <form
+            class="payment-form"
+            action=""
+          >
+            <div class="address-form-main">
+              <div class="address-form-main-row">
+                <input class="address-form-main-row__input" type="text" v-model="paymentForm.name" placeholder="Your Name">
+                <input class="address-form-main-row__input" type="text" v-model="paymentForm.card_number" placeholder="Your Card Number">
+              </div>
+              <div class="address-form-main-row">
+                <input class="address-form-main-row__input" type="text" v-model="paymentForm.cvc" placeholder="Your CVC">
+                <date-picker
+                  valueType="format"
+                  class="address-form-main-row__input"
+                  v-model="paymentForm.expired_date"
+                  placeholder="Your Expired Date">
+                </date-picker>
+              </div>
+              <div class="d-flex">
+                <input type="checkbox" id="is_save_card" v-model="paymentForm.is_save_card">
+                <label for="is_save_card">Save for next purchases</label>
+              </div>
+            </div>
+          </form>
+          <div>
+            <p>Payment Address</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex">
+                <span class="mr-1">{{ addressForm.country }} / </span>
+                <span class="mr-1">{{ addressForm.city }}  / </span>
+                <span class="mr-1">{{ addressForm.address }} / </span>
+                <span class="mr-1">{{ addressForm.postcode }} / </span>
+              </div>
+              <button @click="backToEdit" class="editButton">Edit</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-4">
@@ -70,10 +116,15 @@
 <script>
   import { mapActions, mapGetters } from 'vuex';
   import OrderCartItem from "../../components/order/OrderCartItem";
+  import DatePicker from 'vue2-datepicker';
+  import 'vue2-datepicker/index.css'
 
   export default {
     name: "Order",
-    components: {OrderCartItem},
+    components: {
+      OrderCartItem,
+      DatePicker
+    },
     data: function () {
       return {
         isDelivery: true,
@@ -84,11 +135,23 @@
           phone_number: '',
           postcode: ''
         },
+        paymentForm: {
+          is_save_card: true,
+          card_number: '',
+          cvc: '',
+          expired_date: '',
+          name: ''
+        },
         errors: null
       }
     },
     computed: {
-      ...mapGetters(['CART', 'ADDRESS', 'accessToken']),
+      ...mapGetters([
+        'CART',
+        'ADDRESS',
+        'accessToken',
+        'USER_CARD'
+      ]),
       totalPrice () {
         return this.CART.reduce((total, item) => {
           if (item.product.discountPrice) {
@@ -99,7 +162,16 @@
       }
     },
     methods: {
-      ...mapActions(['FETCH_CART', 'FETCH_ADDRESS', 'UPDATE_ADDRESS']),
+      ...mapActions([
+        'FETCH_CART',
+        'FETCH_ADDRESS',
+        'UPDATE_ADDRESS',
+        'FETCH_CARD',
+        'UPDATE_CARD'
+      ]),
+      backToEdit () {
+        this.isDelivery = true;
+      },
       async nextStep () {
         this.errors = null;
         if (this.isDelivery) {
@@ -109,6 +181,11 @@
           }
           return this.isDelivery = false;
         }
+        const {success, errors} = await this.UPDATE_CARD(this.paymentForm);
+        if (!success) {
+          return this.errors = errors;
+        }
+        return this.$router.push({name: 'Profile'});
       }
     },
     watch: {
@@ -130,11 +207,31 @@
       if (this.accessToken) {
         this.addressForm = await this.FETCH_ADDRESS();
       }
+      if (this.accessToken) {
+        const user_card = await this.FETCH_CARD();
+        if (user_card) {
+          this.paymentForm = user_card;
+        }
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  .editButton {
+    height: 30px;
+    width: 60px;
+    border: none;
+    font-weight: bold;
+    transition: .4s;
+
+    &:hover {
+      background-color: #000000;
+      transition: .4s;
+      color: #ffffff;
+      cursor: pointer;
+    }
+  }
   .isActiveClass {
     font-weight: bold;
     font-size: 20px;
