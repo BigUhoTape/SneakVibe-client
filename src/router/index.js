@@ -97,6 +97,14 @@ const routes = [
             }
           },
           {
+            path: 'order-list',
+            name: 'OrderList',
+            component: () => import('../views/user/OrderList'),
+            meta: {
+              requiresAuth: true
+            }
+          },
+          {
             path: 'order',
             name: 'Order',
             component: () => import('../views/user/Order'),

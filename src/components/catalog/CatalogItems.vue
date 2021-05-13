@@ -95,11 +95,13 @@
     display: flex;
     justify-content: center;
     width: 0;
-    margin: 0 auto;
-    margin-top: 30px;
+    margin: 30px auto 0 auto;
   }
   .page {
     margin-right: 5px;
+    list-style: none;
+    color: #bcbcbc;
+
     &-link {
       display: inline;
       font-family: 'Tahoma', serif;
@@ -119,8 +121,8 @@
     }
   }
   .activeClass {
-    background-color: #000000;
-    color: #D2D2D2;
+    color: black;
+    font-weight: bold;
   }
   .opt {
     background-color: #343434;

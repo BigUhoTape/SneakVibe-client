@@ -8,6 +8,7 @@ import product from "./product";
 import favorite from "./favorite";
 import cart from "./cart";
 import card from "./userCard";
+import order from "./order";
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     product,
     favorite,
     cart,
-    card
+    card,
+    order
   }
 })

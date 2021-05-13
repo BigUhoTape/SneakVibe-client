@@ -28,6 +28,20 @@
       >
       <label for="profile" class="profileLink__label">Address</label>
     </router-link>
+    <router-link
+      :to="{name: 'OrderList'}"
+      tag="div"
+      class="profileLink"
+    >
+      <input
+        type="radio"
+        id="order-list"
+        v-model="value"
+        value="OrderList"
+        class="profileLink__input"
+      >
+      <label for="order-list" class="profileLink__label">Orders</label>
+    </router-link>
   </div>
 </template>
 

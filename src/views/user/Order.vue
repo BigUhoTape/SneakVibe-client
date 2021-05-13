@@ -185,7 +185,7 @@
         if (!success) {
           return this.errors = errors;
         }
-        return this.$router.push({name: 'Profile'});
+        return this.$router.push({name: 'OrderList'});
       }
     },
     watch: {
