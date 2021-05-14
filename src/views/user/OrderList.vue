@@ -12,7 +12,7 @@
         {{ item.id }}
       </p>
       <Paginate v-model="page"
-                :page-count="10"
+                :page-count="PAGE_COUNT"
                 :click-handler="changePage"
                 :prev-text="'Prev'"
                 :next-text="'Next'"
@@ -49,7 +49,8 @@
       ...mapGetters([
         'accessToken',
         'ORDERS',
-        'IS_LOADING_ORDERS'
+        'IS_LOADING_ORDERS',
+        'PAGE_COUNT'
       ])
     },
     methods: {

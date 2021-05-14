@@ -14,6 +14,9 @@ export default {
     },
     CHANGE_LOADING (state) {
       state.isLoadingOrders = !state.isLoadingOrders;
+    },
+    SET_PAGE_COUNT (state, data) {
+      state.pageCount = data;
     }
   },
   actions: {
@@ -26,6 +29,7 @@ export default {
         );
         if (status === 200) {
           commit('SET_ORDERS', data);
+          commit('SET_PAGE_COUNT', parseInt(headers['x-pagination-page-count']));
         }
       } catch (e) {
         console.log(e);
