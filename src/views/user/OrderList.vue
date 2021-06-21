@@ -5,12 +5,33 @@
       <vue-loaders-pacman color="black" scale="1"/>
     </div>
     <div v-else>
-      <p
-        v-for="item in ORDERS"
-        :key="'order-id-' + item.id"
-      >
-        {{ item.id }}
-      </p>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Card Number</th>
+          <th>Created At</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="item in ORDERS">
+          <td>{{ item.id }}</td>
+          <td>{{ item.card_number }}</td>
+          <td>{{ item.created_at }}</td>
+          <td>{{ item.amount }}₽</td>
+          <td>
+            <div v-if="item.status === 'active'">
+              <span class="mr-2">{{ item.status }}</span>
+              <button class="cancelBtn" @click="cancelOrder(item.id)">Cancel</button>
+            </div>
+            <div v-else-if="item.status === 'canceled'">
+              <span style="color: red">{{ item.status }}</span>
+            </div>
+            <div v-else>
+              <span style="color: green">{{ item.status }}</span>
+            </div>
+          </td>
+        </tr>
+      </table>
       <Paginate v-model="page"
                 :page-count="PAGE_COUNT"
                 :click-handler="changePage"
@@ -55,11 +76,15 @@
     },
     methods: {
       ...mapActions([
-        'FETCH_ORDERS'
+        'FETCH_ORDERS',
+        'CANCEL_ORDER'
       ]),
       async changePage (pageNum) {
         this.page = pageNum;
         await this.FETCH_ORDERS(this.page);
+      },
+      async cancelOrder (id) {
+        await this.CANCEL_ORDER(id);
       }
     },
     async created() {
@@ -71,6 +96,49 @@
 </script>
 
 <style lang="less">
+  .cancelBtn {
+    color: red;
+    border: none;
+    background-color: #f2cabf;
+    transition: .4s;
+    padding: 10px 20px 10px 20px;
+    font-weight: bold;
+
+    &:hover {
+      color: white;
+      background-color: red;
+      cursor: pointer;
+      transition: .4s;
+    }
+  }
+  .loader {
+    position: absolute;
+    left: 46%;
+    top: 46%;
+  }
+  table {
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    tr {
+      &:hover {
+        background-color: #ebece6;
+        cursor: pointer;
+      }
+    }
+
+    th {
+      padding-bottom: 40px;
+    }
+
+    td {
+      text-align: center;
+      padding-bottom: 40px;
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      font-weight: bold;
+    }
+  }
   .pagination {
     display: flex;
     justify-content: center;
