@@ -59,7 +59,7 @@ export default {
         return mapProductsToCatalogItem(state.products);
       }
       if (gender === 'sale') {
-        const saleProducts = state.products.filter((discountPrice) => discountPrice);
+        const saleProducts = state.products.filter(product => product.discountPrice);
         return mapProductsToCatalogItem(saleProducts);
       }
       const genderProducts = state.products.filter(product => product.gender === gender);

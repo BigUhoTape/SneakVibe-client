@@ -65,7 +65,8 @@
         let products = this.GENDER_PRODUCTS(this.gender);
         if (this.searchValue) {
           products = products.filter(product => {
-            return product.model.toLowerCase().includes(this.searchValue.toLowerCase());
+            return product.model.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+              product.brand.toLowerCase().includes(this.searchValue.toLowerCase());
           });
           return products;
         }

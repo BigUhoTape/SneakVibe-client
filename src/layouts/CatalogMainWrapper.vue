@@ -16,8 +16,7 @@
         </div>
       </div>
       <div class="catalogMainWrapper-main">
-        <div class="filter col-md-2"></div>
-        <CatalogItems class="col-md-10" :gender='gender' :searchValue="searchValue"/>
+        <CatalogItems class="col-md-12" :gender='gender' :searchValue="searchValue"/>
       </div>
     </div>
   </div>
